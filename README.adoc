@@ -1,0 +1,108 @@
+= JPA-MAVEN-PLUGIN
+stayfool <jych1224@163.com>
+v1.0.0 2017-8-19
+
+this plugin is use to generate jpa entity and spring-data-jpa repository from database.
+
+== USAGE
+[source,xml]
+----
+<plugin>
+    <groupId>io.github.stayfool</groupId>
+    <artifactId>jpa-maven-plugin</artifactId>
+    <version>2.1.0</version>
+    <configuration>
+        <database>
+            <!--mysql,oracle,...-->
+            <type>mysql</type>
+            <!--if you table have a common prefix and you don't wan it appears to class name, set here-->
+            <tablePrefix>gbl_</tablePrefix>
+            <!--<includes>-->
+            <!--<include></include>-->
+            <!--</includes>-->
+            <!--<excludes>-->
+            <!--<exclude></exclude>-->
+            <!--</excludes>-->
+            <!--you can define you type map, name case insensitive, value strict match-->
+            <!--if value is not in java.lang package, specific full name-->
+            <properties>
+                <property>
+                    <name>tinyint</name>
+                    <value>Integer</value>
+                </property>
+            </properties>
+            <datasource>
+                <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
+                <url>jdbc:mysql://localhost/test?useSSL=false</url>
+                <username>root</username>
+                <password>root</password>
+            </datasource>
+        </database>
+        <generate>
+            <!--base output directory-->
+            <baseDir>src/test/java</baseDir>
+            <!--base package-->
+            <basePkg>io.github.stayfool</basePkg>
+            <!--default true-->
+            <!--over write exists file-->
+            <!--<override></override>-->
+            <!--entity configuration-->
+            <entity>
+                <!--default entity-->
+                <!--<pkg>entity</pkg>-->
+                <!--default true-->
+                <!--if this is set up to true, the accessType will be set up to field automatically-->
+                <!--<useLombok>true</useLombok>-->
+                <!--default entity.vm-->
+                <!-- if you want to use your own template, set here-->
+                <!--<template>entity.vm</template>-->
+                <!--default true-->
+                <!--if you don't need @Column(name = "xxx"), set this false-->
+                <!--<needColumnAnnotation>true</needColumnAnnotation>-->
+                <!--default null-->
+                <!--if you want to extends your base entity, config here-->
+                <!--<superClass>xx.xx.BaseEntity</superClass>-->
+                <!--if you specified super class, and it contains ID, please set ID type here-->
+                <!--if the type is not in java.lang package, specify full name-->
+                <!--<idType>Long</idType>-->
+                <!--fields is in super class will be ignored by default-->
+                <!--you can set this to true to force generate all fields either it is in super class or not -->
+                <!--<overrideSuperClassField>false</overrideSuperClassField>-->
+                <!--which fields you don't want to generate-->
+                <!--<excludeFields>-->
+                <!--<excludeField></excludeField>-->
+                <!--</excludeFields>-->
+            </entity>
+
+            <!--spring repository configuration-->
+            <!--this is design for spring-data-jpa-->
+            <!--if you don't want generate repository, remove this label-->
+            <!--if you want use default settings, use <springRepo></springRepo>-->
+            <repository>
+                <!--default repo-->
+                <!--<pkg>repository</pkg>-->
+                <!--default repository.vm-->
+                <!-- if you want to use your own template, set here-->
+                <!--<template>repository.vm</template>-->
+                <!--repository super interface, must be full name-->
+                <!--these can be used :-->
+                <!--org.springframework.data.jpa.repository.JpaRepository-->
+                <!--org.springframework.data.repository.CrudRepository-->
+                <!--org.springframework.data.repository.PagingAndSortingRepository-->
+                <!--org.springframework.data.repository.Repository-->
+                <!--<superInterface>org.springframework.data.jpa.repository.JpaRepository</superInterface>-->
+            </repository>
+        </generate>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.43</version>
+        </dependency>
+    </dependencies>
+</plugin>
+----
+
+== LICENSE
+*MIT*

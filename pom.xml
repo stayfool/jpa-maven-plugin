@@ -1,0 +1,275 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.github.stayfool</groupId>
+    <artifactId>jpa-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <version>2.1.1</version>
+
+    <name>jpa entity code generation Maven Mojo</name>
+    <url>https://github.com/stayfool/jpa-maven-plugin</url>
+    <description>JPA entity and spring-data-jpa repository code generation</description>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>stay fool</name>
+            <email>jych1224@163.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:stayfool/jpa-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:stayfool/jpa-maven-plugin.git</developerConnection>
+        <url>git@github.com:stayfool/jpa-maven-plugin.git</url>
+    </scm>
+
+    <properties>
+        <skipTests>true</skipTests>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.5.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>plexus-utils</artifactId>
+                    <groupId>org.codehaus.plexus</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.5</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>maven-artifact</artifactId>
+                    <groupId>org.apache.maven</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- test dependency-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.43</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.4.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.stayfool</groupId>
+                <artifactId>jpa-maven-plugin</artifactId>
+                <version>2.1.0</version>
+                <configuration>
+                    <database>
+                        <!--mysql,oracle,...-->
+                        <type>mysql</type>
+                        <!--if you table have a common prefix and you don't wan it appears to class name, set here-->
+                        <tablePrefix>gbl_</tablePrefix>
+                        <!--<includes>-->
+                        <!--<include></include>-->
+                        <!--</includes>-->
+                        <!--<excludes>-->
+                        <!--<exclude></exclude>-->
+                        <!--</excludes>-->
+                        <!--you can define you type map, name case insensitive, value strict match-->
+                        <!--if value is not in java.lang package, specific full name-->
+                        <properties>
+                            <property>
+                                <name>tinyint</name>
+                                <value>Integer</value>
+                            </property>
+                        </properties>
+                        <datasource>
+                            <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
+                            <url>jdbc:mysql://localhost/test?useSSL=false</url>
+                            <username>root</username>
+                            <password>root</password>
+                        </datasource>
+                    </database>
+                    <generate>
+                        <!--base output directory-->
+                        <baseDir>src/test/java</baseDir>
+                        <!--base package-->
+                        <basePkg>io.github.stayfool</basePkg>
+                        <!--default true-->
+                        <!--over write exists file-->
+                        <!--<override></override>-->
+                        <!--entity configuration-->
+                        <entity>
+                            <!--default entity-->
+                            <!--<pkg>entity</pkg>-->
+                            <!--default true-->
+                            <!--if this is set up to true, the accessType will be set up to field automatically-->
+                            <!--<useLombok>true</useLombok>-->
+                            <!--default entity.vm-->
+                            <!-- if you want to use your own template, set here-->
+                            <!--<template>entity.vm</template>-->
+                            <!--default true-->
+                            <!--if you don't need @Column(name = "xxx"), set this false-->
+                            <!--<needColumnAnnotation>true</needColumnAnnotation>-->
+                            <!--default null-->
+                            <!--if you want to extends your base entity, config here-->
+                            <!--<superClass>xx.xx.BaseEntity</superClass>-->
+                            <!--if you specified super class, and it contains ID, please set ID type here-->
+                            <!--if the type is not in java.lang package, specify full name-->
+                            <!--<idType>Long</idType>-->
+                            <!--fields is in super class will be ignored by default-->
+                            <!--you can set this to true to force generate all fields either it is in super class or not -->
+                            <!--<overrideSuperClassField>false</overrideSuperClassField>-->
+                            <!--which fields you don't want to generate-->
+                            <!--<excludeFields>-->
+                            <!--<excludeField></excludeField>-->
+                            <!--</excludeFields>-->
+                        </entity>
+
+                        <!--spring repository configuration-->
+                        <!--this is design for spring-data-jpa-->
+                        <!--if you don't want generate repository, remove this label-->
+                        <!--if you want use default settings, use <springRepo></springRepo>-->
+                        <repository>
+                            <!--default repo-->
+                            <!--<pkg>repository</pkg>-->
+                            <!--default repository.vm-->
+                            <!-- if you want to use your own template, set here-->
+                            <!--<template>repository.vm</template>-->
+                            <!--repository super interface, must be full name-->
+                            <!--these can be used :-->
+                            <!--org.springframework.data.jpa.repository.JpaRepository-->
+                            <!--org.springframework.data.repository.CrudRepository-->
+                            <!--org.springframework.data.repository.PagingAndSortingRepository-->
+                            <!--org.springframework.data.repository.Repository-->
+                            <!--<superInterface>org.springframework.data.jpa.repository.JpaRepository</superInterface>-->
+                        </repository>
+                    </generate>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.43</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.5</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- Source -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>gpg2</executable>
+                            <keyname>EA5F5D72B9B306CC2AAF9BE8E248F293472922C4</keyname>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-plugin-plugin</artifactId>
+                        <version>3.5</version>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+</project>

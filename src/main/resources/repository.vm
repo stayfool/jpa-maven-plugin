@@ -1,0 +1,17 @@
+#if (${pkg})
+package ${pkg};
+#end
+
+#foreach($import in ${imports})
+import ${import};
+#end
+
+/**
+ * Auto generate by jpa-maven-plugin
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+public interface ${name} extends ${superInterface}<${entityName}, ${entityIdType}> {
+
+}
