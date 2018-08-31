@@ -1,5 +1,5 @@
 # JPA-MAVEN-PLUGIN
-stayfool <jych1224@163.com>
+stay fool <jych1224@163.com>
 v1.0.0 2017-8-19
 
 this plugin is use to generate jpa entity and spring-data-jpa repository from database.

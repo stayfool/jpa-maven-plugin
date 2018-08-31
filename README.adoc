@@ -16,7 +16,7 @@ this plugin is use to generate jpa entity and spring-data-jpa repository from da
             <!--mysql,oracle,...-->
             <type>mysql</type>
             <!--if you table have a common prefix and you don't wan it appears to class name, set here-->
-            <tablePrefix>gbl_</tablePrefix>
+            <tablePrefix>pre_</tablePrefix>
             <!--<includes>-->
             <!--<include></include>-->
             <!--</includes>-->

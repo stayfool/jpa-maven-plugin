@@ -27,9 +27,15 @@ public class PluginTest {
         generateConfig.setRepository(new SpringRepositoryConfig());
 
         EntityConfig entityConfig = new EntityConfig();
+        entityConfig.setPkg("po");
         entityConfig.setUseLombok(true);
-        entityConfig.setNeedColumnAnnotation(true);
+        entityConfig.setNeedColumnAnnotation(false);
         generateConfig.setEntity(entityConfig);
+
+//        SpringRepositoryConfig repositoryConfig = new SpringRepositoryConfig();
+//        repositoryConfig.setPkg("repo");
+//
+//        generateConfig.setRepository(repositoryConfig);
 
         CodeGenMojo mojo = new CodeGenMojo();
         dataBase.set(mojo, getDatabaseConfig());
@@ -77,18 +83,13 @@ public class PluginTest {
         databaseConfig.setType("mysql");
 //        databaseConfig.setType("oracle");
 //        databaseConfig.setTablePrefix("prefix_");
-//        databaseConfig.setIncludes(Arrays.asList("application", "contract"));
+//        databaseConfig.setIncludes(Arrays.asList("sys_dept_relation"));
 
         DatasourceConfig datasourceConfig = new DatasourceConfig();
         datasourceConfig.setDriverClass("com.mysql.jdbc.Driver");
         datasourceConfig.setUsername("root");
         datasourceConfig.setPassword("root");
-        datasourceConfig.setUrl("jdbc:mysql://localhost:3306/dragon?useSSL=false");
-
-//        datasourceConfig.setDriverClass("oracle.jdbc.OracleDriver");
-//        datasourceConfig.setUsername("prodloan");
-//        datasourceConfig.setPassword("xyj_prod_08oan");
-//        datasourceConfig.setUrl("jdbc:oracle:thin:@localhost:1521:orcl");
+        datasourceConfig.setUrl("jdbc:mysql://localhost:3306/pig?useSSL=false");
 
         databaseConfig.setDatasource(datasourceConfig);
         return databaseConfig;

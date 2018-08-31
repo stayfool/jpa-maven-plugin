@@ -35,9 +35,11 @@ public class ${name} implements Serializable {
 
 #foreach($field in ${fields})
 #if(${useLombok})
+    #if(${field.comment})
     /**
      * ${field.comment}
      */
+    #end
 #if(${field.id})
     @Id
 #if(${field.generator})
@@ -53,9 +55,11 @@ public class ${name} implements Serializable {
 
 #if(${useLombok} == false)
 #foreach($field in ${fields})
+    #if(${field.comment})
     /**
      * ${field.comment}
      */
+    #end
 #if(${field.id})
     @Id
 #if(${field.generator} != "")

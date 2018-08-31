@@ -145,7 +145,7 @@ public class CodeGenMojo extends AbstractMojo {
             // 避免多重主键设置，目前只取第一个找到ID，并放到list中的索引为0的位置
             String key = fieldResult.getString(databaseProperties.getColumnKey());
             // 处理ID
-            if (databaseProperties.getColumnKeyValue().equalsIgnoreCase(key)) {
+            if (idType == null && databaseProperties.getColumnKeyValue().equalsIgnoreCase(key)) {
                 idType = field.getType();
                 field.setId(true);
                 try {
@@ -208,19 +208,7 @@ public class CodeGenMojo extends AbstractMojo {
 
         String fileName = baseDir + generate.getEntity().getPkg() + File.separator + name + Constant.JAVA_FILE_TYPE;
 
-        if (Files.notExists(Paths.get(fileName)) || generate.getOverride()) {
-
-            FileOutputStream fos = new FileOutputStream(fileName);
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos, ENCODING_DEFAULT));
-            Velocity.mergeTemplate(
-                    generate.getEntity().getTemplate(),
-                    ENCODING_DEFAULT,
-                    fromObject(entity),
-                    writer);
-            writer.close();
-
-            getLog().info(fileName + " generated");
-        }
+        writeFile(fileName, generate.getEntity().getTemplate(), entity);
 
         return idType;
     }
@@ -273,19 +261,19 @@ public class CodeGenMojo extends AbstractMojo {
                 .entityIdType(idType)
                 .build();
 
-        Files.createDirectories(Paths.get(baseDir + generate.getRepository().getPkg()));
+        Files.createDirectories(Paths.get(baseDir, generate.getRepository().getPkg()));
 
         String fileName = baseDir + generate.getRepository().getPkg() + File.separator
                 + repositoryName + Constant.JAVA_FILE_TYPE;
 
+        writeFile(fileName, generate.getRepository().getTemplate(), repository);
+    }
+
+    private void writeFile(String fileName, String template, Object data) throws IOException, IllegalAccessException {
         if (Files.notExists(Paths.get(fileName)) || generate.getOverride()) {
             FileOutputStream fos = new FileOutputStream(fileName);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos, ENCODING_DEFAULT));
-            Velocity.mergeTemplate(
-                    generate.getRepository().getTemplate(),
-                    ENCODING_DEFAULT,
-                    fromObject(repository),
-                    writer);
+            Velocity.mergeTemplate(template, ENCODING_DEFAULT, fromObject(data), writer);
             writer.close();
 
             getLog().info(fileName + " generated");
@@ -303,7 +291,7 @@ public class CodeGenMojo extends AbstractMojo {
                     database.getDatasource().getUsername(),
                     database.getDatasource().getPassword());
         } catch (Exception e) {
-            throw new MojoExecutionException("init databaseProperties connection failed", e);
+            throw new MojoExecutionException("init database connection failed", e);
         }
     }
 
@@ -384,7 +372,7 @@ public class CodeGenMojo extends AbstractMojo {
      */
     private String handleTableName(String tableName) {
         String prefix = database.getTablePrefix();
-        if (prefix != null && !(prefix = prefix.trim()).isEmpty()) {
+        if (prefix != null && !(prefix = prefix.trim()).isEmpty() && tableName.indexOf(prefix) == 0) {
             tableName = tableName.substring(prefix.length());
         }
         return tableName;
@@ -439,7 +427,7 @@ public class CodeGenMojo extends AbstractMojo {
     private void initSuperClassField() {
         excludeFields = new HashSet<>();
 
-        if (generate.getEntity().getSuperClass() == null || generate.getEntity().getSuperClass() == null) {
+        if (generate.getEntity().getSuperClass() == null) {
             return;
         }
 
@@ -454,7 +442,7 @@ public class CodeGenMojo extends AbstractMojo {
         try {
             String sourceFile = generate.getEntity().getSuperClass();
             sourceFile = sourceFile.replaceAll(Constant.ESCAPE_DOT, File.separator);
-            String projectPath = Paths.get("").toAbsolutePath().toString();
+            String projectPath = Paths.get(Constant.EMPTY).toAbsolutePath().toString();
             sourceFile = projectPath + Constant.SOURCE_BASE_DIR + sourceFile + Constant.JAVA_FILE_TYPE;
 
             Path sourceFilePath = Paths.get(sourceFile);
@@ -465,7 +453,7 @@ public class CodeGenMojo extends AbstractMojo {
             Files.readAllLines(sourceFilePath).stream()
                     .filter(line -> pattern.matcher(line).matches())
                     .forEach(line -> {
-                        line = line.replace(Constant.SEMICOLON, "");
+                        line = line.replace(Constant.SEMICOLON, Constant.EMPTY);
                         line = line.split(Constant.EQUAL)[0];
                         line = line.trim();
                         line = line.substring(line.lastIndexOf(Constant.SPACE) + 1);
@@ -474,8 +462,7 @@ public class CodeGenMojo extends AbstractMojo {
                         getLog().info("find super class field : " + line);
                     });
         } catch (Exception e) {
-            getLog().warn("super class not found, ignore");
-            getLog().warn(e);
+            getLog().warn("super class not found, ignore", e);
         }
     }
 

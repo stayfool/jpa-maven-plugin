@@ -1,9 +1,5 @@
 package io.github.stayfool.util;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.File;
-
 /**
  * @author paoding
  * @date 2017/12/6
@@ -15,6 +11,7 @@ public interface Constant {
     String SEMICOLON = ";";
     String EQUAL = "=";
     String SPACE = " ";
+    String EMPTY = "";
     String UNDER_LINE = "_";
     String LEFT_BRACKET = "(";
     String FILE_PROTOCOL = "file:";
