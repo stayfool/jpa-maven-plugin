@@ -7,9 +7,9 @@ this plugin is use to generate jpa entity and spring-data-jpa repository from da
 ## USAGE
 ```xml
 <plugin>
-    <groupId>org.stayfool</groupId>
+    <groupId>io.github.stayfool</groupId>
     <artifactId>jpa-maven-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>2.1.2</version>
     <configuration>
         <database>
             <driverClass>com.mysql.jdbc.Driver</driverClass>
@@ -43,7 +43,6 @@ this plugin is use to generate jpa entity and spring-data-jpa repository from da
             <springRepo>
                 <!--default repo-->
                 <pkg>repo</pkg>
-                repository.vm
                 <!-- if you want to use your own template, set here-->
                 <template>repo.vm</template>
                 <!--repository super interface, must be full name-->

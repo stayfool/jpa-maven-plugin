@@ -1,5 +1,5 @@
 = JPA-MAVEN-PLUGIN
-stayfool <jych1224@163.com>
+stay fool <jych1224@163.com>
 v1.0.0 2017-8-19
 
 this plugin is use to generate jpa entity and spring-data-jpa repository from database.
@@ -10,7 +10,7 @@ this plugin is use to generate jpa entity and spring-data-jpa repository from da
 <plugin>
     <groupId>io.github.stayfool</groupId>
     <artifactId>jpa-maven-plugin</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.2</version>
     <configuration>
         <database>
             <!--mysql,oracle,...-->
