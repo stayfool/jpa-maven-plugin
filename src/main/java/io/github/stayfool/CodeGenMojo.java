@@ -34,7 +34,7 @@ import static org.apache.velocity.runtime.RuntimeConstants.ENCODING_DEFAULT;
  * JPA generate generate plugin
  *
  * @author paoding
- * @date 2017/12/05
+ * 2017/12/05
  */
 @Mojo(name = "generate", threadSafe = true)
 public class CodeGenMojo extends AbstractMojo {
@@ -115,7 +115,7 @@ public class CodeGenMojo extends AbstractMojo {
         ResultSet fieldResult = statement.executeQuery();
 
         List<EntityField> fieldList = new ArrayList<>();
-        Set<String> imports = new HashSet<>();
+        Set<String> imports = new TreeSet<>();
 
         // 处理表的列
         while (fieldResult.next()) {
@@ -166,6 +166,8 @@ public class CodeGenMojo extends AbstractMojo {
 
             fieldList.add(field);
         }
+
+        statement.close();
 
         if (generate.getEntity().getUseLombok()) {
             imports.add(Constant.LOMBOK_DATA);

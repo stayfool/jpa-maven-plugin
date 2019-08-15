@@ -87,11 +87,6 @@
             <version>5.1.43</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.4.0</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -116,8 +111,8 @@
                         <!--if value is not in java.lang package, specific full name-->
                         <properties>
                             <property>
-                                <name>tinyint</name>
-                                <value>Integer</value>
+                                <name>Integer</name>
+                                <value>tinyint</value>
                             </property>
                         </properties>
                         <datasource>

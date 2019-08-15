@@ -27,8 +27,8 @@ this plugin is use to generate jpa entity and spring-data-jpa repository from da
             <!--if value is not in java.lang package, specific full name-->
             <properties>
                 <property>
-                    <name>tinyint</name>
-                    <value>Integer</value>
+                    <name>Integer</name>
+                    <value>tinyint</value>
                 </property>
             </properties>
             <datasource>
